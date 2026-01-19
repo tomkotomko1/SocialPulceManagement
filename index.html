@@ -1313,6 +1313,13 @@
         </section>
     </main>
 
+    <!-- Hidden form for Netlify detection - DO NOT REMOVE -->
+    <form name="contact" netlify netlify-honeypot="bot-field" hidden>
+        <input type="text" name="email" />
+        <input type="text" name="subject" />
+        <textarea name="message"></textarea>
+    </form>
+
     <!-- Contact Form Modal -->
     <div class="modal-overlay" id="contactModal">
         <div class="contact-modal">
@@ -1339,13 +1346,8 @@
                 </p>
             </div>
 
-            <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="contactForm">
-                <input type="hidden" name="form-name" value="contact">
-                
-                <!-- Honeypot field for spam protection -->
-                <p class="hidden">
-                    <label>Don't fill this out if you're human: <input name="bot-field" /></label>
-                </p>
+            <form name="contact" method="POST" id="contactForm">
+                <input type="hidden" name="form-name" value="contact" />
 
                 <div class="form-group">
                     <label for="email" class="translate" data-en="Email Address *" data-es="Correo Electrónico *" data-ru="Email Адрес *">Email Address *</label>
@@ -1381,7 +1383,7 @@
                data-ru="Профессиональное Агентство Управления Соцсетями и OnlyFans | Instagram • Twitter • TikTok • Reddit • YouTube • OnlyFans | Основано 2024">
                 Professional Social Media & OnlyFans Management Agency | Instagram • Twitter • TikTok • Reddit • YouTube • OnlyFans | Established 2024
             </p>
-            <p class="footer-text">© 2026 Social Pulse Management. All rights reserved.</p>
+            <p class="footer-text">© 2024 Social Pulse Management. All rights reserved.</p>
         </div>
     </footer>
 
