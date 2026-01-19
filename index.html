@@ -19,8 +19,8 @@
     <link rel="canonical" href="https://socialpulsemanagement.com">
     
     <!-- Favicon -->
-    <link rel="icon" type="image/png" href="/favicon.png">
-    <link rel="apple-touch-icon" href="/favicon.png">
+    <link rel="icon" type="image/x-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='0.9em' font-size='90'>⚡</text></svg>">
+    <link rel="apple-touch-icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><rect width='100' height='100' fill='%23d4af37'/><text y='0.75em' x='50%' text-anchor='middle' font-size='60' fill='%230a0a0a'>SP</text></svg>">
     
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -686,6 +686,155 @@
         .hidden {
             display: none;
         }
+
+        /* Contact Form Modal */
+        .modal-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            backdrop-filter: blur(10px);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .contact-modal {
+            background: var(--bg-card);
+            border: 1px solid var(--border-subtle);
+            padding: 3rem;
+            max-width: 600px;
+            width: 90%;
+            position: relative;
+            transform: translateY(30px);
+            transition: transform 0.3s ease;
+            box-shadow: 0 30px 80px rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-overlay.active .contact-modal {
+            transform: translateY(0);
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 1.5rem;
+            right: 1.5rem;
+            background: transparent;
+            border: none;
+            color: var(--text-secondary);
+            font-size: 2rem;
+            cursor: pointer;
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+            border-radius: 50%;
+        }
+
+        .close-modal:hover {
+            background: var(--bg-secondary);
+            color: var(--text-primary);
+            transform: rotate(90deg);
+        }
+
+        .contact-modal h2 {
+            font-family: 'Cormorant Garamond', serif;
+            font-size: 2.5rem;
+            font-weight: 300;
+            margin-bottom: 1rem;
+            color: var(--accent-gold);
+        }
+
+        .contact-modal p {
+            color: var(--text-secondary);
+            margin-bottom: 2rem;
+            line-height: 1.6;
+        }
+
+        .form-group {
+            margin-bottom: 1.5rem;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            color: var(--text-primary);
+            font-family: 'Manrope', sans-serif;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            border-color: var(--accent-gold);
+            background: var(--bg-primary);
+        }
+
+        .form-group textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        .form-submit {
+            width: 100%;
+            background: var(--accent-gold);
+            color: var(--bg-primary);
+            padding: 1.2rem;
+            font-size: 1.1rem;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Manrope', sans-serif;
+        }
+
+        .form-submit:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(212, 175, 55, 0.3);
+        }
+
+        .form-submit:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        .form-success {
+            display: none;
+            background: rgba(76, 175, 80, 0.1);
+            border: 1px solid rgba(76, 175, 80, 0.3);
+            padding: 1rem;
+            margin-bottom: 1rem;
+            color: #4CAF50;
+            text-align: center;
+        }
+
+        .form-success.show {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -715,12 +864,12 @@
                    data-ru="Агентство полного управления для создателей OnlyFans и инфлюенсеров. Мы управляем вашим OnlyFans, Instagram, Twitter, TikTok, Reddit и всеми социальными платформами, пока вы создаете контент.">
                     Full-service management agency for OnlyFans creators and influencers. We handle your OnlyFans, Instagram, Twitter, TikTok, Reddit, and all social platforms while you focus on creating content that converts.
                 </p>
-                <a href="#contact" class="cta-button translate" 
+                <button onclick="openContactModal()" class="cta-button translate" 
                    data-en="Start Growing Today" 
                    data-es="Comienza a Crecer Hoy" 
                    data-ru="Начните Расти Сегодня">
                     Start Growing Today
-                </a>
+                </button>
             </div>
         </section>
 
@@ -1154,12 +1303,74 @@
                    data-ru="Присоединяйтесь к сотням создателей, которые доверяют Social Pulse Management масштабирование и рост своей империи OnlyFans.">
                     Join hundreds of creators who trust Social Pulse Management to scale and grow their OnlyFans empire.
                 </p>
-                <a href="/cdn-cgi/l/email-protection#a9cac6c7ddc8cadde9ccc5c0ddcccadbccc8ddc6dbda87cac6c4" class="cta-button translate" data-en="Get Started Now" data-es="Comienza Ahora" data-ru="Начать Сейчас">
+                <button onclick="openContactModal()" class="cta-button translate" 
+                   data-en="Get Started Now" 
+                   data-es="Comienza Ahora" 
+                   data-ru="Начать Сейчас">
                     Get Started Now
-                </a>
+                </button>
             </div>
         </section>
     </main>
+
+    <!-- Contact Form Modal -->
+    <div class="modal-overlay" id="contactModal">
+        <div class="contact-modal">
+            <button class="close-modal" onclick="closeContactModal()">&times;</button>
+            <h2 class="translate" 
+                data-en="Get Started Today" 
+                data-es="Comienza Hoy" 
+                data-ru="Начните Сегодня">
+                Get Started Today
+            </h2>
+            <p class="translate" 
+               data-en="Fill out the form below and we'll get back to you within 24 hours to discuss how we can grow your business."
+               data-es="Completa el formulario a continuación y te responderemos en 24 horas para discutir cómo podemos hacer crecer tu negocio."
+               data-ru="Заполните форму ниже, и мы свяжемся с вами в течение 24 часов, чтобы обсудить, как мы можем развить ваш бизнес.">
+                Fill out the form below and we'll get back to you within 24 hours to discuss how we can grow your business.
+            </p>
+            
+            <div class="form-success" id="formSuccess">
+                <p class="translate" 
+                   data-en="Thank you! Your message has been sent successfully. We'll contact you soon!"
+                   data-es="¡Gracias! Tu mensaje ha sido enviado exitosamente. ¡Te contactaremos pronto!"
+                   data-ru="Спасибо! Ваше сообщение успешно отправлено. Мы свяжемся с вами в ближайшее время!">
+                    Thank you! Your message has been sent successfully. We'll contact you soon!
+                </p>
+            </div>
+
+            <form name="contact" method="POST" data-netlify="true" netlify-honeypot="bot-field" id="contactForm">
+                <input type="hidden" name="form-name" value="contact">
+                
+                <!-- Honeypot field for spam protection -->
+                <p class="hidden">
+                    <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+                </p>
+
+                <div class="form-group">
+                    <label for="email" class="translate" data-en="Email Address *" data-es="Correo Electrónico *" data-ru="Email Адрес *">Email Address *</label>
+                    <input type="email" id="email" name="email" required placeholder="your@email.com">
+                </div>
+
+                <div class="form-group">
+                    <label for="subject" class="translate" data-en="Subject *" data-es="Asunto *" data-ru="Тема *">Subject *</label>
+                    <input type="text" id="subject" name="subject" required placeholder="How can we help you?">
+                </div>
+
+                <div class="form-group">
+                    <label for="message" class="translate" data-en="Message *" data-es="Mensaje *" data-ru="Сообщение *">Message *</label>
+                    <textarea id="message" name="message" required placeholder="Tell us about your goals and what you're looking for..."></textarea>
+                </div>
+
+                <button type="submit" class="form-submit translate" 
+                        data-en="Send Message" 
+                        data-es="Enviar Mensaje" 
+                        data-ru="Отправить Сообщение">
+                    Send Message
+                </button>
+            </form>
+        </div>
+    </div>
 
     <footer>
         <div class="footer-content">
@@ -1170,7 +1381,7 @@
                data-ru="Профессиональное Агентство Управления Соцсетями и OnlyFans | Instagram • Twitter • TikTok • Reddit • YouTube • OnlyFans | Основано 2024">
                 Professional Social Media & OnlyFans Management Agency | Instagram • Twitter • TikTok • Reddit • YouTube • OnlyFans | Established 2024
             </p>
-            <p class="footer-text">© 2024 Social Pulse Management. All rights reserved.</p>
+            <p class="footer-text">© 2026 Social Pulse Management. All rights reserved.</p>
         </div>
     </footer>
 
@@ -1286,6 +1497,79 @@
             // Initialize carousel
             startAutoScroll();
         }
+
+        // Contact Modal Functions
+        function openContactModal() {
+            const modal = document.getElementById('contactModal');
+            modal.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeContactModal() {
+            const modal = document.getElementById('contactModal');
+            modal.classList.remove('active');
+            document.body.style.overflow = '';
+            // Reset form
+            document.getElementById('contactForm').reset();
+            document.getElementById('formSuccess').classList.remove('show');
+        }
+
+        // Close modal when clicking outside
+        document.getElementById('contactModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeContactModal();
+            }
+        });
+
+        // Handle form submission
+        const contactForm = document.getElementById('contactForm');
+        contactForm.addEventListener('submit', function(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(contactForm);
+            const submitButton = contactForm.querySelector('button[type="submit"]');
+            
+            // Disable button during submission
+            submitButton.disabled = true;
+            submitButton.textContent = 'Sending...';
+            
+            fetch('/', {
+                method: 'POST',
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: new URLSearchParams(formData).toString()
+            })
+            .then(response => {
+                if (response.ok) {
+                    // Show success message
+                    document.getElementById('formSuccess').classList.add('show');
+                    contactForm.reset();
+                    
+                    // Close modal after 3 seconds
+                    setTimeout(() => {
+                        closeContactModal();
+                    }, 3000);
+                } else {
+                    alert('There was a problem submitting your form. Please try again.');
+                }
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert('There was a problem submitting your form. Please try again.');
+            })
+            .finally(() => {
+                // Re-enable button
+                submitButton.disabled = false;
+                const currentLang = document.documentElement.lang || 'en';
+                submitButton.textContent = submitButton.getAttribute(`data-${currentLang}`);
+            });
+        });
+
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') {
+                closeContactModal();
+            }
+        });
     </script>
 </body>
 </html>
